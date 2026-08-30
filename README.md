@@ -1,405 +1,343 @@
-# Maven Fuzzy Factory --- E-Commerce Product Analytics
+# Maven Fuzzy Factory — E-Commerce Product Analytics
 
-**SQL Analysis • Power BI Dashboard • Business Recommendations**
-
-An end-to-end e-commerce analytics project using **MySQL, SQL, Power BI
-and DAX** to analyze marketing performance, product profitability,
-customer retention, refunds, and the purchase funnel --- and translate
-the findings into actionable business recommendations and proposed
-experiments.
-
-------------------------------------------------------------------------
+**SQL + Power BI | Marketing Performance | Product Analytics | Customer Retention | Funnel Analysis**
 
 ## 📌 Project Overview
 
-This project analyzes approximately three years of Maven Fuzzy Factory
-e-commerce activity, from **19 March 2012 to 19 March 2015**.
+This project analyzes approximately three years of e-commerce activity from **Maven Fuzzy Factory**, covering website sessions, pageviews, orders, products, and refunds.
 
-The analysis connects:
+The objective was to understand:
 
-**Marketing Source → Website Session → Pageview → Order → Product →
-Refund**
+- How marketing channels perform
+- Which products drive revenue and profitability
+- How effectively visitors convert into customers
+- Where customers drop out of the purchase funnel
+- Why mobile users underperform desktop users
+- How well the business retains existing customers
+- Where refunds are creating financial risk
+- Which business problems should be prioritized for experimentation
 
-The goal was to identify where the business is performing well, where
-customers are being lost, and which areas should be prioritized for
-improvement or experimentation.
+The analysis was performed using **MySQL/SQL** and translated into an interactive **Power BI** dashboard.
 
-### Key questions addressed
+---
 
--   Which marketing sources generate the most traffic, orders, revenue
-    and profit?
--   Which channels convert traffic most effectively?
--   Which products drive sales and gross profit?
--   Which products have the strongest margins and highest refund rates?
--   How valuable are repeat customers compared with one-time customers?
--   Where do users drop out of the purchase funnel?
--   How different are desktop and mobile conversion rates?
--   Why is the mobile experience underperforming?
--   Which problems should be prioritized for further testing?
+## 🗂️ Dataset
 
-------------------------------------------------------------------------
+The database contains six core tables:
 
-# 📊 Executive Summary
+| Table | Records |
+|---|---:|
+| `website_sessions` | 472,871 |
+| `website_pageviews` | 1,188,124 |
+| `orders` | 32,313 |
+| `order_items` | 400,025 |
+| `order_item_refunds` | 1,731 |
+| `products` | 4 |
 
-The analysis reveals a business that **scaled strongly over the
-three-year period**, but also has substantial opportunities in **mobile
-conversion, checkout optimization and customer retention**.
+The tables allow the analysis to connect:
 
-### 🔑 Key Findings
+**Marketing Source → Website Session → Pageview → Order → Product → Refund**
 
-  -----------------------------------------------------------------------
-  Area                                Finding
-  ----------------------------------- -----------------------------------
-  **Traffic leader**                  `gsearch` generated **316,035
-                                      sessions**, approximately **66.8%**
-                                      of total traffic
+The website-session data covers **19 March 2012 to 19 March 2015**.
 
-  **Marketing scale**                 `gsearch` generated **21,333
-                                      orders**, **\$1.28M revenue** and
-                                      **\$800K gross profit**
-
-  **Marketing efficiency**            `bsearch` converted at **7.19%**,
-                                      slightly above `gsearch` at
-                                      **6.75%**
-
-  **Weakest channel**                 `socialbook` had the lowest
-                                      conversion rate at **3.21%** and
-                                      revenue/session of **\$2.08**
-
-  **Product leader**                  **The Original Mr. Fuzzy** led in
-                                      units, revenue and total gross
-                                      profit
-
-  **Highest-margin product**          **Birthday Sugar Panda** had the
-                                      highest gross-profit margin at
-                                      **68.49%**
-
-  **Refund risk**                     **Birthday Sugar Panda** had the
-                                      highest refund rate at **6.04%**
-
-  **Customer retention**              Only **1.86%** of customers were
-                                      repeat customers
-
-  **Customer value**                  Repeat customers generated
-                                      substantially more revenue and
-                                      gross profit per customer
-
-  **Device gap**                      Desktop conversion was **8.50%** vs
-                                      **3.09%** on mobile
-
-  **Largest funnel problem**          Shipping → Billing had a **94.39%
-                                      drop-off**
-
-  **Priority opportunity**            Investigate and improve the
-                                      **mobile checkout experience**,
-                                      especially the Shipping → Billing
-                                      transition
-  -----------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
-# 🗃️ Dataset
-
-The project uses the Maven Fuzzy Factory database containing six core
-tables:
-
-  Table                       Records
-  ---------------------- ------------
-  `website_sessions`          472,871
-  `website_pageviews`       1,188,124
-  `orders`                 **32,313**
-  `order_items`               400,025
-  `order_item_refunds`          1,731
-  `products`                        4
-
-### Data relationships
-
-``` text
-Marketing Source
-       ↓
-Website Session
-       ↓
-Website Pageview
-       ↓
-Order
-       ↓
-Order Item / Product
-       ↓
-Refund
-```
-
-------------------------------------------------------------------------
+---
 
 # 🔎 Analysis Areas
 
-## 1. Marketing Performance
+The project was structured around five analytical areas.
 
-`gsearch` was the dominant acquisition source:
+### 1. Marketing Performance
 
-  Source            Sessions   Share
-  --------------- ---------- -------
-  `gsearch`          316,035   66.8%
-  Direct / NULL       83,328   17.6%
-  `bsearch`           62,823   13.3%
-  `socialbook`        10,685    2.3%
+- Traffic by marketing source
+- Conversion rate by source
+- Revenue and gross profit by source
+- Revenue per session
+- Marketing source × device performance
 
-### Conversion
+### 2. Product Performance
 
-  Source            Orders   Conversion
-  --------------- -------- ------------
-  Direct / NULL      6,118        7.34%
-  `bsearch`          4,519        7.19%
-  `gsearch`         21,333        6.75%
-  `socialbook`         343        3.21%
+- Units sold
+- Revenue
+- Gross profit
+- Gross profit margin
+- Refund rate
+- Refunded revenue and gross profit
 
-The important distinction is between **scale and efficiency**. `gsearch`
-drives the largest amount of business activity, while `bsearch` converts
-slightly more efficiently.
+### 3. Customer & Retention
 
-Advertising-spend data is not available, so **ROI/ROAS cannot be
-calculated** from this dataset.
+- One-time vs repeat customers
+- Repeat customer rate
+- Customer value
+- 30/60/90-day retention
+- Time to second purchase
 
-------------------------------------------------------------------------
+### 4. Funnel & Root Cause Analysis
 
-# 🧸 2. Product Performance
+- Product → Cart → Shipping → Billing → Purchase
+- Desktop vs mobile conversion
+- Shipping → Billing drop-off
+- Marketing channel × device
+- Socialbook mobile performance
 
-**The Original Mr. Fuzzy** is the clear scale leader:
+### 5. Recommendations & Experimentation
 
--   **24,226 units sold**
--   **\$1,211,057.74 revenue**
--   **\$738,893 gross profit**
--   **61.01% gross-profit margin**
+- Prioritized business problems
+- Proposed A/B tests
+- Hypotheses
+- Primary and secondary metrics
+- Success criteria
 
-### Gross-profit margins
+---
 
-  Product                    Gross Profit Margin
-  ------------------------ ---------------------
-  Birthday Sugar Panda                **68.49%**
-  Hudson River Mini Bear              **68.36%**
-  Forever Love Bear                       62.51%
-  The Original Mr. Fuzzy                  61.01%
+# 📊 Key Findings
 
-This creates two different product strengths:
+## 1. gsearch drives scale, but not the highest efficiency
 
--   **The Original Mr. Fuzzy** → strongest in scale and total profit
--   **Birthday Sugar Panda / Hudson River Mini Bear** → strongest in
-    profitability per dollar of revenue
+`gsearch` generated **316,035 sessions**, representing approximately **66.8% of total traffic**.
 
-------------------------------------------------------------------------
+However, its **6.75% conversion rate** was below `bsearch` at **7.19%**.
 
-# 🔁 3. Customer Retention
+`socialbook` performed weakest, with only a **3.21% conversion rate**.
 
-The customer base is overwhelmingly made up of one-time buyers.
+**Business implication:**  
+The largest traffic source is not necessarily the most efficient at converting visitors.
 
--   **31,105** one-time customers
--   **591** repeat customers
--   **0** customers with 4+ orders
--   Repeat-customer rate: **1.86%**
+---
 
-Repeat customers were substantially more valuable individually:
+## 2. gsearch is the largest contributor to revenue and profit
 
-  Customer Type     Avg. Revenue / Customer   Avg. Profit / Customer
-  --------------- ------------------------- ------------------------
-  One-time                          \$59.93                  \$37.59
-  Repeat                           \$125.81                  \$79.22
+`gsearch` generated approximately:
 
-**Business implication:** Improving repeat purchases could increase
-customer value without relying entirely on acquiring additional
-customers.
+- **$1.28M revenue**
+- **$800K gross profit**
+- **21,333 orders**
 
-------------------------------------------------------------------------
+It is therefore the strongest channel in terms of overall business scale.
 
-# 🛒 4. Purchase Funnel & Root Cause Analysis
+However, direct/NULL traffic had the highest revenue per session at **$4.46**, while `socialbook` had the lowest at **$2.08**.
 
-The purchase funnel was analyzed as:
+> **Important limitation:** advertising-spend data is not available, so ROI/ROAS cannot be calculated from this dataset.
 
-``` text
-Product → Cart → Shipping → Billing → Purchase
-```
+---
 
-The largest bottleneck occurs between **Shipping and Billing**:
+## 3. The Original Mr. Fuzzy is the primary product driver
 
--   Shipping sessions: **64,484**
--   Billing sessions: **3,617**
--   Drop-off: **94.39%**
+The **Original Mr. Fuzzy** generated:
 
-This is the most significant funnel problem identified in the analysis.
+- **24,226 units sold**
+- **$1.21M revenue**
+- **$738.9K gross profit**
 
-The data does not prove the exact cause, but the size of the drop
-strongly supports investigating the transition from shipping information
-to billing.
+It is the clear leader in sales volume, revenue and total gross profit.
 
-------------------------------------------------------------------------
+However, it has the lowest gross profit margin among the four products at **61.01%**.
 
-# 📱 5. Desktop vs Mobile
+| Product | Gross Profit Margin |
+|---|---:|
+| Birthday Sugar Panda | 68.49% |
+| Hudson River Mini Bear | 68.36% |
+| Forever Love Bear | 62.51% |
+| Original Mr. Fuzzy | 61.01% |
 
-A major conversion gap exists between devices:
+This creates an important distinction:
 
-  Device      Sessions   Purchases   Conversion
-  --------- ---------- ----------- ------------
-  Desktop      327,027      27,805    **8.50%**
-  Mobile       145,844       4,508    **3.09%**
+> **Mr. Fuzzy is strongest in scale, while Birthday Sugar Panda and Hudson River Mini Bear are stronger in profitability per dollar of revenue.**
 
-Desktop converts at almost **2.75×** the mobile rate.
+---
 
-### Shipping → Billing by device
+# 👥 Customer Retention
 
--   **Mobile:** 3.49%
--   **Desktop:** 6.08%
+Customer retention emerged as one of the biggest opportunities.
 
-The transition performs poorly on both devices, but is substantially
-weaker on mobile.
+Out of **31,696 customers**:
 
-------------------------------------------------------------------------
+- **31,105** were one-time customers
+- **591** were repeat customers
+- **Repeat customer rate = 1.86%**
 
-# 📉 6. Socialbook Performance
+There were no customers with four or more purchases in the analyzed data.
 
-`socialbook` is the weakest marketing source across several measures:
+More importantly, repeat customers were significantly more valuable:
 
--   Conversion: **3.21%**
--   Revenue/session: **\$2.08**
--   Orders: **343**
+| Metric | One-time | Repeat |
+|---|---:|---:|
+| Revenue / Customer | $59.93 | $125.81 |
+| Profit / Customer | $37.59 | $79.22 |
 
-The problem is especially pronounced on mobile:
+Repeat customers generated more than twice the revenue and profit per customer.
 
-  Device      Sessions   Purchases   Conversion
-  --------- ---------- ----------- ------------
-  Mobile         4,573          38    **0.83%**
-  Desktop        6,112         305    **4.99%**
+The average time to a second purchase was **35.16 days**, suggesting that the **30–35 day period** could be an important window for re-engagement.
 
-This suggests two issues may be interacting:
+---
 
-1.  Lower-quality traffic from `socialbook`
-2.  A weaker mobile conversion experience
+# 📱 Mobile Conversion Gap
 
-The dataset supports this pattern, but does not establish causality.
+Desktop users converted at:
 
-------------------------------------------------------------------------
+**8.50%**
 
-# 💰 7. Refund Analysis
+Mobile users converted at:
 
-  Product                    Units Sold   Refunded Items   Refund Rate
-  ------------------------ ------------ ---------------- -------------
-  Birthday Sugar Panda            4,985              301     **6.04%**
-  The Original Mr. Fuzzy         24,226            1,237     **5.11%**
-  Forever Love Bear               5,796              129     **2.23%**
-  Hudson River Mini Bear          5,018               64     **1.28%**
+**3.09%**
 
-**Birthday Sugar Panda** combines the highest gross-profit margin with
-the highest refund rate, making it a product worth investigating.
+That means desktop conversion was approximately **2.75× mobile conversion**.
 
-**Hudson River Mini Bear** combines a high margin with the lowest refund
-rate.
+The gap appeared across every marketing source.
 
-------------------------------------------------------------------------
+The most severe example was Socialbook:
 
-# 💡 Business Recommendations
+- Desktop: **4.99%**
+- Mobile: **0.83%**
 
-### 1. Improve the mobile checkout experience
+---
 
-Investigate the Shipping → Billing transition, with particular attention
-to mobile usability, form friction, validation and payment-flow issues.
+# 🚨 Funnel Bottleneck
 
-### 2. Improve customer retention
+The biggest funnel problem occurs at:
 
-Test post-purchase engagement, personalized offers,
-replenishment/reminder campaigns and other strategies designed to
-encourage a second purchase.
+**Shipping → Billing**
 
-### 3. Investigate weaker landing-page performance
+Overall:
 
-`/lander-5` had the highest conversion rate at **10.17%**, while
-`/lander-3` and `/lander-1` performed substantially worse.
+- Shipping sessions: **64,484**
+- Billing sessions: **3,617**
+- Drop-off: **94.39%**
 
-### 4. Investigate `socialbook`
+The problem becomes even clearer when split by device:
 
-The channel has both low conversion and low revenue/session, with
-especially weak mobile performance.
+| Device | Shipping → Billing |
+|---|---:|
+| Desktop | 6.08% |
+| Mobile | 3.49% |
 
-### 5. Investigate refund drivers
+Mobile users are therefore substantially less effective at progressing through this stage.
 
-Review customer feedback, product expectations, quality and delivery
-experience for products with higher refund rates, particularly Birthday
-Sugar Panda and The Original Mr. Fuzzy.
+**Business implication:**  
+The mobile checkout experience, particularly the transition from Shipping to Billing, should be investigated first.
 
-------------------------------------------------------------------------
+---
 
-# 🧪 Proposed A/B Tests
+# 💰 Refund Risk
 
-The project includes **proposed experiments**, not completed
-experiments.
+Refund analysis revealed two products requiring attention.
 
-  -----------------------------------------------------------------------
-  Priority                Experiment              Primary Metric
-  ----------------------- ----------------------- -----------------------
-  🔴 High                 Mobile Shipping →       Shipping → Billing
-                          Billing redesign        conversion
+### Birthday Sugar Panda
 
-  🔴 High                 Mobile checkout         Mobile purchase
-                          simplification          conversion
+**Highest refund rate: 6.04%**
 
-  🟠 Medium               Post-purchase retention Repeat-purchase rate
-                          campaign                
+### Original Mr. Fuzzy
 
-  🟠 Medium               Landing-page            Landing-page conversion
-                          optimization            
+**Largest financial impact:**
 
-  🟡 Medium               Socialbook traffic /    Channel conversion
-                          landing-page            
-                          optimization            
-  -----------------------------------------------------------------------
+- Refunded revenue: **$61.8K**
+- Refunded gross profit: **$37.7K**
+- Refund rate: **5.11%**
 
-These experiments are recommendations derived from observed patterns.
-The dataset does **not** contain treatment/control groups, so no claim
-of experimental causality is made.
+Therefore:
 
-------------------------------------------------------------------------
+- **Birthday Sugar Panda** is the highest-rate refund concern.
+- **Original Mr. Fuzzy** is the largest absolute financial concern.
 
-# ⚠️ Analytical Limitations
+Meanwhile, **Hudson River Mini Bear** combines a **68.36% margin** with the lowest refund rate of **1.28%**, making it particularly attractive from a profitability/risk perspective.
+
+---
+
+# 💡 Recommended Business Priorities
+
+Based on the analysis, four experiments were prioritized:
+
+| Priority | Experiment | Problem |
+|---|---|---|
+| 🥇 1 | Mobile Checkout | Shipping → Billing drop-off |
+| 🥈 2 | Retention Campaign | 1.86% repeat customers |
+| 🥉 3 | Landing Page | Large landing-page performance variation |
+| 4 | Socialbook Mobile | 0.83% mobile conversion |
+
+### 1. Mobile Checkout
+
+Test a simplified mobile checkout with fewer fields, clearer progress indicators, larger buttons and a simplified billing experience.
+
+**Primary metric:** Shipping → Billing conversion rate.
+
+### 2. Retention Campaign
+
+Test targeted post-purchase re-engagement around the observed **30–35 day** repurchase window.
+
+**Primary metric:** Second-purchase rate within 60 days.
+
+### 3. Landing Page
+
+Test a redesigned landing page inspired by the characteristics of the stronger-performing `/lander-5`.
+
+**Primary metric:** Landing-page → Order conversion rate.
+
+### 4. Socialbook Mobile
+
+Test a dedicated mobile-optimized landing and checkout experience for Socialbook mobile traffic.
+
+**Primary metric:** Purchase conversion rate.
+
+---
+
+# 📈 Power BI Dashboard
+
+The analysis was converted into a **six-page interactive Power BI dashboard**:
+
+1. Executive Overview
+2. Marketing Performance
+3. Product Performance
+4. Customer & Retention
+5. Funnel & Root Cause
+6. Recommendations & A/B Tests
+
+The dashboard is designed to move from:
+
+**Overall Business Performance → Diagnostic Analysis → Root Causes → Recommended Actions**
+
+Dashboard screenshots are available in the [`Dashboard/`](Dashboard/) folder.
+
+---
+
+# ⚠️ Important Limitations
 
 ### A/B Testing
 
-The dataset does not contain experimental treatment/control groups. The
-proposed experiments are **business recommendations**, not completed
-experiments.
+The dataset does not contain randomized treatment/control groups or experiment identifiers.
 
-### Marketing ROI / ROAS
+Therefore, this project does **not** calculate actual A/B-test winners.
 
-Advertising-spend data is not available. Therefore, channel **ROI and
-ROAS cannot be calculated**.
+The experiments presented are business-driven proposals based on observed problems, not completed experiments.
 
-### Causal Inference
+### Marketing ROI
 
-The analysis identifies strong patterns and areas requiring
-investigation, but observational data alone cannot prove the exact
-underlying cause of problems.
+Advertising-spend data is not available.
 
-------------------------------------------------------------------------
+Therefore, channel ROI/ROAS cannot be calculated. The analysis is limited to traffic, conversions, revenue and profit.
 
-# 📊 Power BI Dashboard
+### Root Cause
 
-The project contains a six-page Power BI dashboard:
+The analysis identifies strong patterns and areas requiring investigation, but observational data alone cannot prove the exact underlying cause of a problem—for example, why users abandon the mobile checkout.
 
-1.  **Executive Overview**
-2.  **Marketing Performance**
-3.  **Product Performance**
-4.  **Customer & Retention**
-5.  **Funnel & Root Cause**
-6.  **Recommendations & A/B Tests**
+---
 
-Dashboard screenshots are available in the [`Dashboard`](Dashboard/)
-folder.
+# 🛠️ Tools & Technologies
 
-The Power BI source file is available in [`Power BI`](Power%20BI/).
+- **MySQL** — Data exploration, joins, aggregation and business analysis
+- **SQL** — Marketing, product, customer, funnel and refund analysis
+- **Power BI** — Interactive dashboard and data visualization
+- **DAX** — Measures and calculated metrics
+- **Data storytelling** — Translating analytical findings into business recommendations
+- **Git / Git LFS** — Version control and storage of large project files
 
-------------------------------------------------------------------------
+---
 
-# 🗂️ Project Structure
+# 📁 Project Structure
 
-``` text
+```text
 Maven-Fuzzy-Factory-Analytics/
 │
 ├── README.md
+├── .gitattributes
 │
 ├── Dashboard/
 │   ├── 01_Executive_Overview.png
@@ -424,36 +362,34 @@ Maven-Fuzzy-Factory-Analytics/
         └── maven_fuzzy_factory_analysis.sql
 ```
 
-------------------------------------------------------------------------
+The large SQL and Power BI files are stored using **Git LFS**.
 
-# 🛠️ Tools & Technologies
+---
 
--   **MySQL** --- Database exploration, joins and aggregation
--   **SQL** --- Marketing, product, customer, funnel and refund analysis
--   **Power BI** --- Interactive dashboard and data visualization
--   **DAX** --- Measures and calculated metrics
--   **Git & GitHub** --- Version control and project documentation
--   **Git LFS** --- Storage of large SQL and Power BI files
+# 🎯 Final Project Takeaway
 
-------------------------------------------------------------------------
+The analysis shows a business that has scaled strongly but has significant opportunities in conversion optimization and customer retention.
 
-# 🎯 Final Takeaway
+The most actionable findings are:
 
-Maven Fuzzy Factory shows strong business growth, but the analysis
-highlights a clear opportunity to improve the **quality of that
-growth**.
+> **Fix the mobile checkout bottleneck → improve customer retention → optimize weaker landing experiences → investigate Socialbook mobile performance.**
 
-The most important priorities are:
+At the same time, product analysis shows that scale and profitability are not always the same thing, while the retention analysis demonstrates that repeat customers are substantially more valuable than one-time buyers.
 
-> **Fix the mobile checkout bottleneck → improve customer retention →
-> optimize weaker landing experiences → investigate Socialbook and
-> refund performance.**
+---
 
-At the same time, the product analysis shows that **scale and
-profitability are not always the same thing**. The Original Mr. Fuzzy
-dominates total contribution, while Birthday Sugar Panda and Hudson
-River Mini Bear demonstrate stronger gross-profit margins.
+## 📂 Project Resources
 
-Overall, the project combines **SQL-based analysis, Power BI
-visualization and business reasoning** to move from raw e-commerce data
-to practical decisions and testable recommendations.
+- **[Power BI Dashboard](Power%20BI/Maven_Fuzzy_Factory_Analytics.pbix)**
+- **[Dashboard Screenshots](Dashboard/)**
+- **[Project Documentation](Documentation/Maven_Fuzzy_Factory_Project_Documentation.docx)**
+- **[SQL Analysis](SQL/02_business_analysis/maven_fuzzy_factory_analysis.sql)**
+- **[Database Setup](SQL/01_database_setup/)**
+
+---
+
+## 👤 Author
+
+**Prabodh Aglawe**
+
+This project was developed as an end-to-end e-commerce analytics portfolio project using SQL and Power BI.
